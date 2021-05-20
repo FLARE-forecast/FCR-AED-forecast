@@ -2,7 +2,6 @@ met_qaqc <- function(realtime_file,
                      qaqc_file,
                      cleaned_met_file_dir,
                      input_file_tz,
-                     local_tzone,
                      nldas = NULL){
 
   if(!is.na(qaqc_file)){
@@ -33,7 +32,7 @@ met_qaqc <- function(realtime_file,
 
     TIMESTAMP_in <- lubridate::force_tz(d1$TIMESTAMP, tzone = input_file_tz)
 
-    d1$TIMESTAMP <- lubridate::with_tz(TIMESTAMP_in,tz = local_tzone)
+    d1$TIMESTAMP <- lubridate::with_tz(TIMESTAMP_in,tz = "UTC")
 
     d2 <- readr::read_csv(qaqc_file,
                           col_types = list(Reservoir = readr::col_character(),
@@ -85,7 +84,7 @@ met_qaqc <- function(realtime_file,
 
     TIMESTAMP_in <- lubridate::force_tz(d2$DateTime, tzone = input_file_tz)
 
-    d2$TIMESTAMP <- lubridate::with_tz(TIMESTAMP_in,tz = local_tzone)
+    d2$TIMESTAMP <- lubridate::with_tz(TIMESTAMP_in,tz = "UTC")
 
     #d3 <- read.csv( fname[3])
     #TIMESTAMP_in <- as.POSIXct(d3$time,
@@ -135,7 +134,7 @@ met_qaqc <- function(realtime_file,
                                format= "%Y-%m-%d %H:%M",
                                tz = input_file_tz)
 
-    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = local_tzone)
+    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = "UTC")
 
     d <- data.frame(time = d1$TIMESTAMP, ShortWave = d1$SR01Up_Avg, LongWave = d1$IR01UpCo_Avg, AirTemp = d1$AirTC_Avg, RelHum = d1$RH, WindSpeed = d1$WS_ms_Avg, Rain = d1$Rain_mm_Tot, pressure = d1$BP_kPa_Avg)
   }
